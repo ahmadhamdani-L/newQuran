@@ -148,10 +148,10 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_childs:
+      surahs:
         description: relations
         items:
-          $ref: '#/definitions/model.JuzChildEntityModel'
+          $ref: '#/definitions/model.SurahEntityModel'
         type: array
       value:
         type: string
@@ -183,10 +183,10 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_childs:
+      surahs:
         description: relations
         items:
-          $ref: '#/definitions/model.JuzChildEntityModel'
+          $ref: '#/definitions/model.SurahEntityModel'
         type: array
       value:
         type: string
@@ -218,10 +218,10 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_childs:
+      surahs:
         description: relations
         items:
-          $ref: '#/definitions/model.JuzChildEntityModel'
+          $ref: '#/definitions/model.SurahEntityModel'
         type: array
       value:
         type: string
@@ -278,10 +278,10 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_childs:
+      surahs:
         description: relations
         items:
-          $ref: '#/definitions/model.JuzChildEntityModel'
+          $ref: '#/definitions/model.SurahEntityModel'
         type: array
       value:
         type: string
@@ -299,7 +299,7 @@ definitions:
             $ref: '#/definitions/response.Meta'
         type: object
     type: object
-  model.JuzChildEntityModel:
+  model.SurahEntityModel:
     properties:
       created_at:
         type: string
@@ -313,10 +313,6 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_grand_childs:
-        items:
-          $ref: '#/definitions/model.JuzGrandChildEntityModel'
-        type: array
       juz_id:
         description: relations
         type: integer
@@ -340,10 +336,10 @@ definitions:
         type: string
       modified_by:
         type: string
-      juz_childs:
+      surahs:
         description: relations
         items:
-          $ref: '#/definitions/model.JuzChildEntityModel'
+          $ref: '#/definitions/model.SurahEntityModel'
         type: array
       value:
         type: string
@@ -351,51 +347,10 @@ definitions:
     - key
     - value
     type: object
-  model.JuzGrandChildEntityModel:
-    properties:
-      created_at:
-        type: string
-      created_by:
-        type: string
-      id:
-        type: integer
-      key:
-        type: string
-      modified_at:
-        type: string
-      modified_by:
-        type: string
-      juz_child_id:
-        description: relations
-        type: integer
-      value:
-        type: string
-    required:
-    - key
-    - value
-    type: object
-  response.Meta:
-    properties:
-      info:
-        $ref: '#/definitions/abstraction.PaginationInfo'
-      message:
-        default: "true"
-        type: string
-      success:
-        default: true
-        type: boolean
-    type: object
-  response.errorResponse:
-    properties:
-      error:
-        type: string
-      meta:
-        $ref: '#/definitions/response.Meta'
-    type: object
 host: localhost:3030
 info:
   contact: {}
-  description: This is a doc for quran.
+  description: This is a doc for Quran.
   title: quran
   version: 0.0.1
 paths:

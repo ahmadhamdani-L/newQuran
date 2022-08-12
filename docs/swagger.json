@@ -149,7 +149,12 @@
                     },
                     {
                         "type": "string",
-                        "name": "key",
+                        "name": "nama_juz",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "no_juz",
                         "in": "query"
                     },
                     {
@@ -180,11 +185,6 @@
                     {
                         "type": "string",
                         "name": "sort_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "value",
                         "in": "query"
                     }
                 ],
@@ -388,7 +388,7 @@
                 }
             }
         },
-        "/juzs/{id}/{child}/{child_id}": {
+        "/juzs/{id}/{surahs}/{surah_id}": {
             "get": {
                 "security": [
                     {
@@ -632,14 +632,14 @@
         "dto.JuzCreateRequest": {
             "type": "object",
             "required": [
-                "key",
-                "value"
+                "nama_juz",
+                "no_juz"
             ],
             "properties": {
-                "key": {
+                "nama_juz": {
                     "type": "string"
                 },
-                "value": {
+                "no_juz": {
                     "type": "string"
                 }
             }
@@ -647,8 +647,8 @@
         "dto.JuzCreateResponse": {
             "type": "object",
             "required": [
-                "key",
-                "value"
+                "nama_juz",
+                "no_juz"
             ],
             "properties": {
                 "created_at": {
@@ -660,23 +660,16 @@
                 "id": {
                     "type": "integer"
                 },
-                "key": {
+                "nama_juz": {
+                    "type": "string"
+                },
+                "no_juz": {
                     "type": "string"
                 },
                 "modified_at": {
                     "type": "string"
                 },
                 "modified_by": {
-                    "type": "string"
-                },
-                "juz_childs": {
-                    "description": "relations",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.JuzChildEntityModel"
-                    }
-                },
-                "value": {
                     "type": "string"
                 }
             }
@@ -722,11 +715,11 @@
                 "modified_by": {
                     "type": "string"
                 },
-                "juz_childs": {
+                "surahs": {
                     "description": "relations",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.JuzChildEntityModel"
+                        "$ref": "#/definitions/model.SurahEntityModel"
                     }
                 },
                 "value": {
@@ -775,11 +768,11 @@
                 "modified_by": {
                     "type": "string"
                 },
-                "juz_childs": {
+                "surahs": {
                     "description": "relations",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.JuzChildEntityModel"
+                        "$ref": "#/definitions/model.SurahEntityModel"
                     }
                 },
                 "value": {
@@ -866,11 +859,11 @@
                 "modified_by": {
                     "type": "string"
                 },
-                "juz_childs": {
+                "surahs": {
                     "description": "relations",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.JuzChildEntityModel"
+                        "$ref": "#/definitions/model.SurahEntityModel"
                     }
                 },
                 "value": {
@@ -894,11 +887,12 @@
                 }
             }
         },
-        "model.JuzChildEntityModel": {
+        "model.SurahEntityModel": {
             "type": "object",
             "required": [
-                "key",
-                "value"
+                "nama_surah",
+                "no_surah",
+                "juz_id"
             ],
             "properties": {
                 "created_at": {
@@ -910,26 +904,20 @@
                 "id": {
                     "type": "integer"
                 },
-                "key": {
+                "nama_surah": {
                     "type": "string"
                 },
-                "modified_at": {
+                "no_surah": {
                     "type": "string"
-                },
-                "modified_by": {
-                    "type": "string"
-                },
-                "juz_grand_childs": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.JuzGrandChildEntityModel"
-                    }
                 },
                 "juz_id": {
                     "description": "relations",
                     "type": "integer"
                 },
-                "value": {
+                "modified_at": {
+                    "type": "string"
+                },
+                "modified_by": {
                     "type": "string"
                 }
             }
@@ -937,8 +925,8 @@
         "model.JuzEntityModel": {
             "type": "object",
             "required": [
-                "key",
-                "value"
+                "nama_juz",
+                "no_juz"
             ],
             "properties": {
                 "created_at": {
@@ -950,7 +938,10 @@
                 "id": {
                     "type": "integer"
                 },
-                "key": {
+                "nama_juz": {
+                    "type": "string"
+                },
+                "no_juz": {
                     "type": "string"
                 },
                 "modified_at": {
@@ -959,49 +950,12 @@
                 "modified_by": {
                     "type": "string"
                 },
-                "juz_childs": {
+                "surahs": {
                     "description": "relations",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.JuzChildEntityModel"
+                        "$ref": "#/definitions/model.SurahEntityModel"
                     }
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.JuzGrandChildEntityModel": {
-            "type": "object",
-            "required": [
-                "key",
-                "value"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "created_by": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "key": {
-                    "type": "string"
-                },
-                "modified_at": {
-                    "type": "string"
-                },
-                "modified_by": {
-                    "type": "string"
-                },
-                "juz_child_id": {
-                    "description": "relations",
-                    "type": "integer"
-                },
-                "value": {
-                    "type": "string"
                 }
             }
         },
