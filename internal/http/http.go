@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	docs "quran/docs"
+	"quran/internal/app/adjustment"
 	"quran/internal/app/auth"
 	"quran/internal/app/juz"
 	"quran/internal/app/surah"
@@ -39,4 +40,5 @@ func Init(e *echo.Echo, f *factory.Factory) {
 	auth.NewHandler(f).Route(e.Group("/auth"))
 	juz.NewHandler(f).Route(e.Group("/juzs"))
 	surah.NewHandler(f).Route(e.Group("/surahs"))
+	adjustment.NewHandler(f).Route(e.Group("/adjustment"))
 }

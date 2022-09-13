@@ -12,6 +12,7 @@ type Factory struct {
 	UserRepository repository.User
 	JuzRepository  repository.Juz
 	SurahRepository  repository.Surah
+	AdjustmentRepository repository.Adjustment
 }
 
 func NewFactory() *Factory {
@@ -38,4 +39,5 @@ func (f *Factory) SetupRepository() {
 	f.UserRepository = repository.NewUser(f.Db)
 	f.JuzRepository = repository.NewJuz(f.Db)
 	f.SurahRepository = repository.NewSurah(f.Db)
+	f.AdjustmentRepository = repository.NewAdjustment(f.Db)
 }

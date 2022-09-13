@@ -7,74 +7,74 @@ import (
 )
 
 // Get
-type AdjusmentGetRequest struct {
+type AdjustmentGetRequest struct {
 	abstraction.Pagination
-	model.AdjusmentFilterModel
+	model.AdjustmentFilterModel
 }
-type AdjusmentGetResponse struct {
-	Datas          []model.AdjusmentModel
+type AdjustmentGetResponse struct {
+	Datas          []model.AdjustmentModel
 	PaginationInfo abstraction.PaginationInfo
 }
-type AdjusmentGetResponseDoc struct {
+type AdjustmentGetResponseDoc struct {
 	Body struct {
 		Meta res.Meta               `json:"meta"`
-		Data []model.AdjusmentModel `json:"data"`
+		Data []model.AdjustmentModel `json:"data"`
 	} `json:"body"`
 }
 
 // GetByID
-type AdjusmentGetByIDRequest struct {
+type AdjustmentGetByIDRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
 }
-type AdjusmentGetByIDResponse struct {
-	model.AdjusmentModel
+type AdjustmentGetByIDResponse struct {
+	model.AdjustmentModel
 }
-type AdjusmentGetByIDResponseDoc struct {
+type AdjustmentGetByIDResponseDoc struct {
 	Body struct {
 		Meta res.Meta           `json:"meta"`
-		Data AdjusmentGetByIDResponse `json:"data"`
+		Data AdjustmentGetByIDResponse `json:"data"`
 	} `json:"body"`
 }
 
 // Create
-type AdjusmentCreateRequest struct {
-	model.Adjusment
+type AdjustmentCreateRequest struct {
+	model.Adjustment
 }
-type AdjusmentCreateResponse struct {
-	model.AdjusmentModel
+type AdjustmentCreateResponse struct {
+	model.AdjustmentModel
 }
-type AdjusmentCreateResponseDoc struct {
+type AdjustmentCreateResponseDoc struct {
 	Body struct {
 		Meta res.Meta          `json:"meta"`
-		Data AdjusmentCreateResponse `json:"data"`
+		Data AdjustmentCreateResponse `json:"data"`
 	} `json:"body"`
 }
 
 // Update
-type AdjusmentUpdateRequest struct {
+type AdjustmentUpdateRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
-	model.Adjusment
+	model.Adjustment
 }
-type AdjusmentUpdateResponse struct {
-	model.AdjusmentModel
+type AdjustmentUpdateResponse struct {
+	model.AdjustmentModel
 }
-type AdjusmentUpdateResponseDoc struct {
+type AdjustmentUpdateResponseDoc struct {
 	Body struct {
 		Meta res.Meta          `json:"meta"`
-		Data AdjusmentUpdateResponse `json:"data"`
+		Data AdjustmentUpdateResponse `json:"data"`
 	} `json:"body"`
 }
 
 // Delete
-type AdjusmentDeleteRequest struct {
+type AdjustmentDeleteRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
 }
-type AdjusmentDeleteResponse struct {
-	model.AdjusmentModel
+type AdjustmentDeleteResponse struct {
+	model.AdjustmentModel
 }
-type AdjusmentDeleteResponseDoc struct {
+type AdjustmentDeleteResponseDoc struct {
 	Body struct {
 		Meta res.Meta          `json:"meta"`
-		Data AdjusmentDeleteResponse `json:"data"`
+		Data AdjustmentDeleteResponse `json:"data"`
 	} `json:"body"`
 }

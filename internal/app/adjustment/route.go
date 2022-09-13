@@ -1,4 +1,4 @@
-package adjusment
+package adjustment
 
 import (
 	"quran/internal/middleware"

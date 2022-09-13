@@ -1,4 +1,4 @@
-package adjusment
+package adjustment
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 	"quran/internal/dto"
 	"quran/internal/factory"
 	res "quran/pkg/util/response"
-
 	"github.com/labstack/echo/v4"
 )
 
@@ -24,7 +23,7 @@ func NewHandler(f *factory.Factory) *handler {
 func (h *handler) Get(c echo.Context) error {
 	cc := c.(*abstraction.Context)
 
-	payload := new(dto.AdjusmentGetRequest)
+	payload := new(dto.AdjustmentGetRequest)
 	if err := c.Bind(payload); err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
@@ -44,7 +43,7 @@ func (h *handler) Get(c echo.Context) error {
 func (h *handler) GetByID(c echo.Context) error {
 	cc := c.(*abstraction.Context)
 
-	payload := new(dto.AdjusmentGetByIDRequest)
+	payload := new(dto.AdjustmentGetByIDRequest)
 	if err = c.Bind(payload); err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
@@ -66,7 +65,7 @@ func (h *handler) GetByID(c echo.Context) error {
 func (h *handler) Update(c echo.Context) error {
 	cc := c.(*abstraction.Context)
 
-	payload := new(dto.AdjusmentUpdateRequest)
+	payload := new(dto.AdjustmentUpdateRequest)
 	if err := c.Bind(&payload); err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
@@ -86,7 +85,7 @@ func (h *handler) Update(c echo.Context) error {
 func (h *handler) Create(c echo.Context) error {
 	cc := c.(*abstraction.Context)
 
-	payload := new(dto.AdjusmentCreateRequest)
+	payload := new(dto.AdjustmentCreateRequest)
 	if err := c.Bind(payload); err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
@@ -105,7 +104,7 @@ func (h *handler) Create(c echo.Context) error {
 func (h *handler) Delete(c echo.Context) error {
 	cc := c.(*abstraction.Context)
 
-	payload := new(dto.AdjusmentDeleteRequest)
+	payload := new(dto.AdjustmentDeleteRequest)
 	if err := c.Bind(payload); err != nil {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
