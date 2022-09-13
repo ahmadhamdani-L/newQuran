@@ -32,9 +32,7 @@ type UserEntityModel struct {
 	Context *abstraction.Context `json:"-" gorm:"-"`
 }
 
-func (UserEntityModel) TableName() string {
-	return "users"
-}
+
 
 func (m *UserEntityModel) BeforeCreate(tx *gorm.DB) (err error) {
 	m.CreatedAt = *date.DateTodayLocal()
@@ -72,3 +70,55 @@ func (m *UserEntityModel) GenerateToken() (string, error) {
 	tokenString, err := token.SignedString([]byte(jwtKey))
 	return tokenString, err
 }
+
+type SendMailInput struct {
+	TemplateId uint `json:"templateId"`
+	ClientId   uint `json:"clientId"`
+}
+
+type Template struct {
+	gorm.Model
+	Name    string `json:"name" gorm:"type:varchar(50);unique;not null"`
+	Subject string `json:"subject" gorm:"type:varchar(50)"`
+	Body    string `json:"body" gorm:"type:varchar(10000)"`
+	UserID  uint
+	User    UserEntityModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+}
+
+type Client struct {
+	gorm.Model
+	Name       string `json:"name" gorm:"type:varchar(50)"`
+	MailId     string `json:"mailID" valid:"email,required" gorm:"type:varchar(50);not null;unique_index:idx_first_second"`
+	Phone      int    `json:"phone" valid:"required" gorm:"type:bigint;not null"`
+	Preference string `json:"preference" gorm:"type:varchar(50)"`
+	UserID     uint   `gorm:"unique_index:idx_first_second"`
+	User       UserEntityModel   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+}
+
+type Field struct {
+	gorm.Model
+	Key      string `json:"key" valid:"required" gorm:"type:varchar(50);not null;unique_index:idx_field"`
+	Value    string `json:"value" valid:"required" gorm:"type:varchar(50);not null"`
+	ClientID uint   `gorm:"unique_index:idx_field"`
+	Client   Client `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+}
+
+type KafkaPayload struct {
+	From    string `json:"from"`
+	To      string `json:"to"`
+	Text    string `json:"text"`
+	Subject string `json:"subject"`
+}
+
+type Audit struct {
+	gorm.Model
+	To           string
+	FromUser     uint `gorm:"not null"`
+	TemplateName string
+	TemplateID   uint
+}
+
+func (UserEntityModel) TableName() string {
+	return "users"
+}
+

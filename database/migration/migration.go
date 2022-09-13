@@ -27,6 +27,7 @@ func Init() {
 				&model.UserEntityModel{},
 				&model.JuzEntityModel{},
 				&model.SurahEntityModel{},
+				&model.AdjustmentModel{},
 			},
 			IsAutoMigrate: true,
 		},

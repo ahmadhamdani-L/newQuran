@@ -13,9 +13,6 @@ type JuzEntity struct {
 	NoJuz string `json:"no_juz" validate:"required"`
 }
 
-
-
-
 type JuzFilter struct {
 	NamaJuz   *string `query:"nama_juz" filter:"ILIKE"`
 	NoJuz *string `query:"no_juz"`

@@ -1,14 +1,15 @@
 package main
 
 import (
+	"os"
 	db "quran/database"
 	"quran/database/migration"
+	"quran/internal/app/auth"
 	"quran/internal/factory"
 	"quran/internal/http"
 	"quran/internal/middleware"
-	// "quran/pkg/elasticsearch"
 	"quran/pkg/util/env"
-	"os"
+	"quran/utils"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -41,9 +42,11 @@ func main() {
 
 	e := echo.New()
 	middleware.Init(e)
-
 	f := factory.NewFactory()
 	http.Init(e, f)
+	conn := utils.InitKafkaConn()    // connect to kafka
+	auth.KafkaConn = conn
+	auth.RedisPoolInit()
 
 	e.Logger.Fatal(e.Start(":" + PORT))
 }

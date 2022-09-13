@@ -5,7 +5,6 @@ import (
 	"quran/internal/dto"
 	"quran/internal/factory"
 	res "quran/pkg/util/response"
-
 	"github.com/labstack/echo/v4"
 )
 
@@ -82,3 +81,45 @@ func (h *handler) Register(c echo.Context) error {
 
 	return res.SuccessResponse(data).Send(c)
 }
+
+func (h *handler) ForgotPassword(c echo.Context) error {
+	cc := c.(*abstraction.Context)
+
+	payload := new(dto.ForgotPasswordRequest)
+	if err = c.Bind(payload); err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
+	}
+	if err = c.Validate(payload); err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.Validation, err).Send(c)
+	}
+
+	data, err := h.service.ForgotPassword(cc, payload)
+	if err != nil {
+		return res.ErrorResponse(err).Send(c)
+	}
+
+	return res.SuccessResponse(data).Send(c)
+}
+
+func (h *handler) NewPassword(c echo.Context) error {
+	cc := c.(*abstraction.Context)
+	// var pwd dto.NewPassword
+	// cacheKey := ctx.Params("id")
+	// mail, _ := Cache.getDetails(cacheKey)
+
+	payload := new(dto.NewPassword)
+	if err := c.Bind(payload); err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
+	}
+	if err := c.Validate(payload); err != nil {
+		return res.ErrorBuilder(&res.ErrorConstant.Validation, err).Send(c)
+	}
+
+	result, err := h.service.GetNewPassword(cc, payload)
+	if err != nil {
+		return res.ErrorResponse(err).Send(c)
+	}
+
+	return res.SuccessResponse(result).Send(c)
+}
+

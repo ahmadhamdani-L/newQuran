@@ -34,3 +34,23 @@ type AuthRegisterResponseDoc struct {
 		Data AuthRegisterResponse `json:"data"`
 	} `json:"body"`
 }
+
+//forgot passsword
+type ForgotPasswordRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+}
+
+type FindById struct {
+	ID    int `json:"id" validate:"required,id"`
+}
+
+type ForgotPasswordPayload struct {
+	To      string `json:"to" `
+	From    string `json:"from" `
+	Text    string `json:"text" `
+	Subject string `json:"subject" `
+}
+
+type NewPassword struct {
+	Password string `json:"password"`
+}
