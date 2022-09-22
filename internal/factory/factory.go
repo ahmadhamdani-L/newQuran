@@ -13,6 +13,12 @@ type Factory struct {
 	JuzRepository  repository.Juz
 	SurahRepository  repository.Surah
 	AdjustmentRepository repository.Adjustment
+	AdjustmentDetailRepository repository.AdjustmentDetail
+	CoaRepository                              repository.Coa
+	CoaGroupRepository                         repository.CoaGroup
+	CompanyRepository                          repository.Company
+	TrialBalanceRepository                     repository.TrialBalance
+	TrialBalanceDetailRepository               repository.TrialBalanceDetail
 }
 
 func NewFactory() *Factory {
@@ -40,4 +46,10 @@ func (f *Factory) SetupRepository() {
 	f.JuzRepository = repository.NewJuz(f.Db)
 	f.SurahRepository = repository.NewSurah(f.Db)
 	f.AdjustmentRepository = repository.NewAdjustment(f.Db)
+	f.AdjustmentDetailRepository = repository.NewAdjustmentDetail(f.Db)
+	f.CoaRepository = repository.NewCoa(f.Db)
+	f.CoaGroupRepository = repository.NewCoaGroup(f.Db)
+	f.CompanyRepository = repository.NewCompany(f.Db)
+	f.TrialBalanceRepository = repository.NewTrialBalance(f.Db)
+	f.TrialBalanceDetailRepository = repository.NewTrialBalanceDetail(f.Db)
 }

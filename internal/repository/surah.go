@@ -132,8 +132,6 @@ func (r *surah) Update(ctx *abstraction.Context, id *int, e *model.SurahEntity) 
 	if err != nil {
 		return nil, err
 	}
-	var Nama = ctx.Auth.Name
-	data.ModifiedBy = Nama
 	err = conn.Model(data).UpdateColumns(&data).
 		WithContext(ctx.Request().Context()).Error
 	if err != nil {

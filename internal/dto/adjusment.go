@@ -12,13 +12,13 @@ type AdjustmentGetRequest struct {
 	model.AdjustmentFilterModel
 }
 type AdjustmentGetResponse struct {
-	Datas          []model.AdjustmentModel
+	Datas          []model.AdjustmentEntityModel
 	PaginationInfo abstraction.PaginationInfo
 }
 type AdjustmentGetResponseDoc struct {
 	Body struct {
 		Meta res.Meta               `json:"meta"`
-		Data []model.AdjustmentModel `json:"data"`
+		Data []model.AdjustmentEntityModel `json:"data"`
 	} `json:"body"`
 }
 
@@ -27,7 +27,7 @@ type AdjustmentGetByIDRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
 }
 type AdjustmentGetByIDResponse struct {
-	model.AdjustmentModel
+	model.AdjustmentEntityModel
 }
 type AdjustmentGetByIDResponseDoc struct {
 	Body struct {
@@ -38,10 +38,10 @@ type AdjustmentGetByIDResponseDoc struct {
 
 // Create
 type AdjustmentCreateRequest struct {
-	model.Adjustment
+	model.AdjustmentEntity
 }
 type AdjustmentCreateResponse struct {
-	model.AdjustmentModel
+	model.AdjustmentEntityModel
 }
 type AdjustmentCreateResponseDoc struct {
 	Body struct {
@@ -53,10 +53,10 @@ type AdjustmentCreateResponseDoc struct {
 // Update
 type AdjustmentUpdateRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
-	model.Adjustment
+	model.AdjustmentEntity
 }
 type AdjustmentUpdateResponse struct {
-	model.AdjustmentModel
+	model.AdjustmentEntityModel
 }
 type AdjustmentUpdateResponseDoc struct {
 	Body struct {
@@ -70,7 +70,7 @@ type AdjustmentDeleteRequest struct {
 	ID int `param:"id" validate:"required,numeric"`
 }
 type AdjustmentDeleteResponse struct {
-	model.AdjustmentModel
+	model.AdjustmentEntityModel
 }
 type AdjustmentDeleteResponseDoc struct {
 	Body struct {

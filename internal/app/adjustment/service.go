@@ -7,6 +7,7 @@ import (
 	"quran/internal/factory"
 	"quran/internal/model"
 	"quran/internal/repository"
+	"quran/pkg/util/response"
 	res "quran/pkg/util/response"
 	"quran/pkg/util/trxmanager"
 
@@ -34,7 +35,7 @@ func NewService(f *factory.Factory) *service {
 
 func (s *service) Find(ctx *abstraction.Context, payload *dto.AdjustmentGetRequest) (*dto.AdjustmentGetResponse, error) {
 	var result *dto.AdjustmentGetResponse
-	var datas *[]model.AdjustmentModel
+	var datas *[]model.AdjustmentEntityModel
 
 	datas, info, err := s.Repository.Find(ctx, &payload.AdjustmentFilterModel, &payload.Pagination)
 	if err != nil {
@@ -61,48 +62,44 @@ func (s *service) FindByID(ctx *abstraction.Context, payload *dto.AdjustmentGetB
 	}
 
 	result = &dto.AdjustmentGetByIDResponse{
-		AdjustmentModel: *data,
+		AdjustmentEntityModel: *data,
 	}
 
 	return result, nil
 }
 
+
 func (s *service) Create(ctx *abstraction.Context, payload *dto.AdjustmentCreateRequest) (*dto.AdjustmentCreateResponse, error) {
-	var result *dto.AdjustmentCreateResponse
-	var data *model.AdjustmentModel
+	var data model.AdjustmentEntityModel
 
 	if err = trxmanager.New(s.Db).WithTrx(ctx, func(ctx *abstraction.Context) error {
-		// data.Context = ctx
-
-		// data.Adjustment = payload.Adjustment
-		data, err = s.Repository.Create(ctx, &payload.Adjustment)
+		data.Context = ctx
+		data.AdjustmentEntity = payload.AdjustmentEntity
+		result, err := s.Repository.Create(ctx, &data)
 		if err != nil {
-			return res.ErrorBuilder(&res.ErrorConstant.UnprocessableEntity, err)
+			return response.ErrorBuilder(&response.ErrorConstant.UnprocessableEntity, err)
 		}
-
+		data = *result
 		return nil
 	}); err != nil {
-		return result, err
-
+		return &dto.AdjustmentCreateResponse{}, err
 	}
-
-	result = &dto.AdjustmentCreateResponse{
-		AdjustmentModel: *data,
+	result := &dto.AdjustmentCreateResponse{
+		AdjustmentEntityModel: data,
 	}
-
 	return result, nil
 }
 
 func (s *service) Update(ctx *abstraction.Context, payload *dto.AdjustmentUpdateRequest) (*dto.AdjustmentUpdateResponse, error) {
 	var result *dto.AdjustmentUpdateResponse
-	var data *model.AdjustmentModel
+	var data *model.AdjustmentEntityModel
 
 	if err = trxmanager.New(s.Db).WithTrx(ctx, func(ctx *abstraction.Context) error {
 		_, err := s.Repository.FindByID(ctx, &payload.ID)
 		if err != nil {
 			return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err)
 		}
-		data, err = s.Repository.Update(ctx, &payload.ID, &payload.Adjustment)
+		data, err = s.Repository.Update(ctx, &payload.ID, &payload.AdjustmentEntity)
 		if err != nil {
 			return res.ErrorBuilder(&res.ErrorConstant.UnprocessableEntity, err)
 		}
@@ -112,7 +109,7 @@ func (s *service) Update(ctx *abstraction.Context, payload *dto.AdjustmentUpdate
 	}
 
 	result = &dto.AdjustmentUpdateResponse{
-		AdjustmentModel: *data,
+		AdjustmentEntityModel: *data,
 	}
 
 	return result, nil
@@ -120,7 +117,7 @@ func (s *service) Update(ctx *abstraction.Context, payload *dto.AdjustmentUpdate
 
 func (s *service) Delete(ctx *abstraction.Context, payload *dto.AdjustmentDeleteRequest) (*dto.AdjustmentDeleteResponse, error) {
 	var result *dto.AdjustmentDeleteResponse
-	var data *model.AdjustmentModel
+	var data *model.AdjustmentEntityModel
 
 	if err = trxmanager.New(s.Db).WithTrx(ctx, func(ctx *abstraction.Context) error {
 		data, err = s.Repository.FindByID(ctx, &payload.ID)
@@ -139,7 +136,7 @@ func (s *service) Delete(ctx *abstraction.Context, payload *dto.AdjustmentDelete
 	}
 
 	result = &dto.AdjustmentDeleteResponse{
-		AdjustmentModel: *data,
+		AdjustmentEntityModel: *data,
 	}
 
 	return result, nil

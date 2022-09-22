@@ -52,12 +52,12 @@ func (JuzEntityModel) TableName() string {
 
 func (m *JuzEntityModel) BeforeCreate(tx *gorm.DB) (err error) {
 	m.CreatedAt = *date.DateTodayLocal()
-	// m.CreatedBy = m.Context.Auth.Name
+	m.CreatedBy = m.Context.Auth.Name
 	return
 }
 
 func (m *JuzEntityModel) BeforeUpdate(tx *gorm.DB) (err error) {
-	m.ModifiedAt = *date.DateTodayLocal()
-	// m.ModifiedBy = m.Context.Auth.Name
+	m.ModifiedAt = date.DateTodayLocal()
+	m.ModifiedBy = &m.Context.Auth.Name
 	return
 }

@@ -49,6 +49,7 @@ func (m *SurahEntityModel) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (m *SurahEntityModel) BeforeUpdate(tx *gorm.DB) (err error) {
-	m.ModifiedAt = *date.DateTodayLocal()
+	m.ModifiedAt = date.DateTodayLocal()
+	m.ModifiedBy = &m.Context.Auth.Name
 	return
 }

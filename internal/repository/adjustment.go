@@ -10,11 +10,11 @@ import (
 )
 
 type Adjustment interface {
-	Find(ctx *abstraction.Context, m *model.AdjustmentFilterModel, p *abstraction.Pagination) (*[]model.AdjustmentModel, *abstraction.PaginationInfo, error)
-	FindByID(ctx *abstraction.Context, id *int) (*model.AdjustmentModel, error)
-	Create(ctx *abstraction.Context, e *model.Adjustment) (*model.AdjustmentModel, error)
-	Update(ctx *abstraction.Context, id *int, e *model.Adjustment) (*model.AdjustmentModel, error)
-	Delete(ctx *abstraction.Context, id *int, e *model.AdjustmentModel) (*model.AdjustmentModel, error)
+	Find(ctx *abstraction.Context, m *model.AdjustmentFilterModel, p *abstraction.Pagination) (*[]model.AdjustmentEntityModel, *abstraction.PaginationInfo, error)
+	FindByID(ctx *abstraction.Context, id *int) (*model.AdjustmentEntityModel, error)
+	Create(ctx *abstraction.Context, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error)
+	Update(ctx *abstraction.Context, id *int, e *model.AdjustmentEntity) (*model.AdjustmentEntityModel, error)
+	Delete(ctx *abstraction.Context, id *int, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error)
 }
 
 type adjustment struct {
@@ -29,13 +29,13 @@ func NewAdjustment(db *gorm.DB) *adjustment {
 	}
 }
 
-func (r *adjustment) Find(ctx *abstraction.Context, m *model.AdjustmentFilterModel, p *abstraction.Pagination) (*[]model.AdjustmentModel, *abstraction.PaginationInfo, error) {
+func (r *adjustment) Find(ctx *abstraction.Context, m *model.AdjustmentFilterModel, p *abstraction.Pagination) (*[]model.AdjustmentEntityModel, *abstraction.PaginationInfo, error) {
 	conn := r.CheckTrx(ctx)
 
-	var datas []model.AdjustmentModel
+	var datas []model.AdjustmentEntityModel
 	var info abstraction.PaginationInfo
 
-	query := conn.Model(&model.AdjustmentModel{})
+	query := conn.Model(&model.AdjustmentEntityModel{})
 
 	// filter
 	query = r.Filter(ctx, query, m)
@@ -85,10 +85,10 @@ func (r *adjustment) Find(ctx *abstraction.Context, m *model.AdjustmentFilterMod
 	return &datas, &info, nil
 }
 
-func (r *adjustment) FindByID(ctx *abstraction.Context, id *int) (*model.AdjustmentModel, error) {
+func (r *adjustment) FindByID(ctx *abstraction.Context, id *int) (*model.AdjustmentEntityModel, error) {
 	conn := r.CheckTrx(ctx)
 
-	var data model.AdjustmentModel
+	var data model.AdjustmentEntityModel
 
 	
 
@@ -101,40 +101,43 @@ func (r *adjustment) FindByID(ctx *abstraction.Context, id *int) (*model.Adjustm
 	return &data, nil
 }
 
-func (r *adjustment) Create(ctx *abstraction.Context, e *model.Adjustment) (*model.AdjustmentModel, error) {
+func (r *adjustment) Create(ctx *abstraction.Context, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error) {
 	conn := r.CheckTrx(ctx)
 
-	var data model.AdjustmentModel
-	data.Adjustment = *e
-	var Nama = ctx.Auth.Name
-	data.CreatedBy = Nama
-	err := conn.Create(&data).
-		WithContext(ctx.Request().Context()).Error
-	if err != nil {
+	if err := conn.Create(e).WithContext(ctx.Request().Context()).Error; err != nil {
+		return nil, err
+	}
+	if err := conn.Model(e).First(e).WithContext(ctx.Request().Context()).Error; err != nil {
 		return nil, err
 	}
 
-	err = conn.Model(data).First(&data).
-		WithContext(ctx.Request().Context()).Error
-	if err != nil {
-		return nil, err
-	}
-	return &data, nil
+	return e, nil
 }
 
-func (r *adjustment) Update(ctx *abstraction.Context, id *int, e *model.Adjustment) (*model.AdjustmentModel, error) {
+// func (r *trialbalance) Create(ctx *abstraction.Context, e *model.TrialBalanceEntityModel) (*model.TrialBalanceEntityModel, error) {
+// 	conn := r.CheckTrx(ctx)
+
+// 	if err := conn.Create(e).WithContext(ctx.Request().Context()).Error; err != nil {
+// 		return nil, err
+// 	}
+// 	if err := conn.Model(e).Preload("Company").First(e).WithContext(ctx.Request().Context()).Error; err != nil {
+// 		return nil, err
+// 	}
+
+// 	return e, nil
+// }
+
+func (r *adjustment) Update(ctx *abstraction.Context, id *int, e *model.AdjustmentEntity) (*model.AdjustmentEntityModel, error) {
 	conn := r.CheckTrx(ctx)
 
-	var data model.AdjustmentModel
+	var data model.AdjustmentEntityModel
 
 	err := conn.Where("id = ?", id).First(&data).
 		WithContext(ctx.Request().Context()).Error
 	if err != nil {
 		return nil, err
 	}
-	data.Adjustment = *e
-	var Nama = ctx.Auth.Name
-	data.ModifiedBy = Nama
+	data.AdjustmentEntity = *e
 	err = conn.Model(data).UpdateColumns(&data).
 		WithContext(ctx.Request().Context()).Error
 	if err != nil {
@@ -143,7 +146,7 @@ func (r *adjustment) Update(ctx *abstraction.Context, id *int, e *model.Adjustme
 	return &data, nil
 }
 
-func (r *adjustment) Delete(ctx *abstraction.Context, id *int, e *model.AdjustmentModel) (*model.AdjustmentModel, error) {
+func (r *adjustment) Delete(ctx *abstraction.Context, id *int, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error) {
 	conn := r.CheckTrx(ctx)
 
 	err := conn.Where("id = ?", id).Delete(e).

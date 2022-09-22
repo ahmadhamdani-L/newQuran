@@ -3,8 +3,6 @@ package migration
 import (
 	"fmt"
 	"quran/database"
-	"quran/internal/model"
-
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -24,10 +22,14 @@ func Init() {
 	mgConfigurations := map[string]Migration{
 		"QURAN": &migration{
 			DbModels: &[]interface{}{
-				&model.UserEntityModel{},
-				&model.JuzEntityModel{},
-				&model.SurahEntityModel{},
-				&model.AdjustmentModel{},
+				// &model.UserEntityModel{},
+				// &model.AdjustmentEntityModel{},
+				// &model.AdjustmentDetailEntityModel{},
+				// &model.CoaEntityModel{},
+				// &model.CoaGroupEntityModel{},
+				// &model.TrialBalanceDetailEntityModel{},
+				// &model.TrialBalanceEntityModel{},
+				// &model.CompanyEntityModel{},
 			},
 			IsAutoMigrate: true,
 		},

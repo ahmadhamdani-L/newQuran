@@ -133,8 +133,6 @@ func (r *juz) Update(ctx *abstraction.Context, id *int, e *model.JuzEntity) (*mo
 		return nil, err
 	}
 	data.JuzEntity = *e
-	var Nama = ctx.Auth.Name
-	data.ModifiedBy = Nama
 	err = conn.Model(data).UpdateColumns(&data).
 		WithContext(ctx.Request().Context()).Error
 	if err != nil {

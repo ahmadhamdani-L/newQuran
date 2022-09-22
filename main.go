@@ -10,7 +10,6 @@ import (
 	"quran/internal/middleware"
 	"quran/pkg/util/env"
 	"quran/utils"
-
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
