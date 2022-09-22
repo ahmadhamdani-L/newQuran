@@ -50,6 +50,21 @@ type AdjustmentCreateResponseDoc struct {
 	} `json:"body"`
 }
 
+// Create With Detail
+type AdjustmentCreateWithDetailRequest struct {
+	model.AdjustmentEntity
+	model.AdjustmentDetailEntity
+}
+type AdjustmentCreateWithDetailResponse struct {
+	model.AdjustmentEntityModel
+}
+type AdjustmentCreateWithDetailResponseDoc struct {
+	Body struct {
+		Meta res.Meta          `json:"meta"`
+		Data AdjustmentCreateResponse `json:"data"`
+	} `json:"body"`
+}
+
 // Update
 type AdjustmentUpdateRequest struct {
 	ID int `param:"id" validate:"required,numeric"`

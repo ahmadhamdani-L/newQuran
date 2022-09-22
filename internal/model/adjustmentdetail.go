@@ -6,7 +6,7 @@ import (
 
 type AdjustmentDetailEntity struct {
 	AdjustmentId int `json:"adjustment_id" `
-	CoaCode string `json:"coa_code" validate:"required"`
+	CoaCode string `json:"coa_code" `
 	ReffNumber string `json:"reff_number" `
 	Description string `json:"description" `
 	BalanceSheetDr float64 `json:"balance_sheet_dr" sql:"type:decimal(20,8);"`

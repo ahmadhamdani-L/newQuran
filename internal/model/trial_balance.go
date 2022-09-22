@@ -30,7 +30,7 @@ type TrialBalanceEntityModel struct {
 
 	// relations
 	Company            CompanyEntityModel              `json:"company" gorm:"foreignKey:CompanyID"`
-	// Formatter          FormatterEntityModel            `json:"formatter,omitempty" gorm:"foreignKey:FormatterID"`
+	Formatter          FormatterEntityModel            `json:"formatter,omitempty" gorm:"foreignKey:FormatterID"`
 	TrialBalanceDetail []TrialBalanceDetailEntityModel `json:"trial_balance_detail" gorm:"foreignKey:TrialBalanceID"`
 
 	// context

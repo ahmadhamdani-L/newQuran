@@ -11,6 +11,8 @@ type AdjustmentEntity struct {
 	Note string `json:"note" validate:"required"`
 	CompanyId int `json:"company_id" `
 	Period string `json:"period" validate:"required"`
+	Versions int `json:"versions" `
+	VersionsTb int `json:"versions_tb" `
 }
 
 

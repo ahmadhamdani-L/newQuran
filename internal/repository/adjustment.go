@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"quran/internal/abstraction"
+	"quran/internal/dto"
 	"quran/internal/model"
 
 	"gorm.io/gorm"
@@ -13,6 +14,7 @@ type Adjustment interface {
 	Find(ctx *abstraction.Context, m *model.AdjustmentFilterModel, p *abstraction.Pagination) (*[]model.AdjustmentEntityModel, *abstraction.PaginationInfo, error)
 	FindByID(ctx *abstraction.Context, id *int) (*model.AdjustmentEntityModel, error)
 	Create(ctx *abstraction.Context, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error)
+	CreateWithDetail(ctx *abstraction.Context, e *model.AdjustmentEntityModel, ed *model.AdjustmentDetailEntityModel) (*model.AdjustmentEntityModel, error)
 	Update(ctx *abstraction.Context, id *int, e *model.AdjustmentEntity) (*model.AdjustmentEntityModel, error)
 	Delete(ctx *abstraction.Context, id *int, e *model.AdjustmentEntityModel) (*model.AdjustmentEntityModel, error)
 }
@@ -90,11 +92,9 @@ func (r *adjustment) FindByID(ctx *abstraction.Context, id *int) (*model.Adjustm
 
 	var data model.AdjustmentEntityModel
 
-	
-
 	err := conn.Where("id = ?", id).First(&data).
 		WithContext(ctx.Request().Context()).Error
-		conn.Preload(clause.Associations).Find(&data)
+	conn.Preload(clause.Associations).Find(&data)
 	if err != nil {
 		return nil, err
 	}
@@ -114,18 +114,73 @@ func (r *adjustment) Create(ctx *abstraction.Context, e *model.AdjustmentEntityM
 	return e, nil
 }
 
-// func (r *trialbalance) Create(ctx *abstraction.Context, e *model.TrialBalanceEntityModel) (*model.TrialBalanceEntityModel, error) {
-// 	conn := r.CheckTrx(ctx)
+func (r *adjustment) CreateWithDetail(ctx *abstraction.Context, e *model.AdjustmentEntityModel, ed *model.AdjustmentDetailEntityModel) (*model.AdjustmentEntityModel, error) {
+	conn := r.CheckTrx(ctx)
 
-// 	if err := conn.Create(e).WithContext(ctx.Request().Context()).Error; err != nil {
-// 		return nil, err
-// 	}
-// 	if err := conn.Model(e).Preload("Company").First(e).WithContext(ctx.Request().Context()).Error; err != nil {
-// 		return nil, err
-// 	}
+	var data []model.TrialBalanceEntityModel
+	var data1 model.CoaEntityModel
+	
+	nolimit := 1000
+		criteriaTB := dto.AdjustmentGetRequest{}
+		criteriaTB.Pagination.PageSize = &nolimit
 
-// 	return e, nil
-// }
+
+	getAdjustment, _, err := r.Find(ctx , &criteriaTB.AdjustmentFilterModel, &criteriaTB.Pagination)
+		if err != nil {
+			return nil, err
+		}
+
+	versions := len(*getAdjustment) + 1
+
+	e.Versions = versions
+
+	if err := conn.Create(e).WithContext(ctx.Request().Context()).Error; err != nil {
+		return nil, err
+	}
+	if err := conn.Model(e).First(e).WithContext(ctx.Request().Context()).Error; err != nil {
+		return nil, err
+	}
+	err = conn.Where("versions = ?", e.VersionsTb).First(&data).
+		WithContext(ctx.Request().Context()).Error
+		conn.Preload("Company").Preload("TrialBalanceDetail").First(&data).WithContext(ctx.Request().Context())
+	if err != nil {
+		return nil, err
+	}
+
+	ed.CoaCode = data[0].TrialBalanceDetail[0].TrialBalanceDetailEntity.Code
+	ed.AdjustmentId = e.ID
+	err = conn.Where("code = ?", ed.CoaCode).First(&data1).
+		WithContext(ctx.Request().Context()).Error
+	if err != nil {
+		return nil, err
+	}
+
+	ed.Description = data1.Name
+
+	if err := conn.Create(ed).WithContext(ctx.Request().Context()).Error; err != nil {
+		return nil, err
+	}
+	if err := conn.Model(ed).First(ed).WithContext(ctx.Request().Context()).Error; err != nil {
+		return nil, err
+	}
+var data3 model.TrialBalanceDetailEntityModel
+	err = conn.Where("trial_balance_id = ?", data[0].Entity.ID).First(&data3).
+		WithContext(ctx.Request().Context()).Error
+	if err != nil {
+		return nil, err
+	}
+data3.AmountBeforeAje = data3.AmountAfterAje
+	data3.AmountAjeCr= ed.BalanceSheetCr
+	data3.AmountAjeDr = ed.BalanceSheetDr
+	data3.AmountAfterAje = data3.AmountAjeCr + data3.AmountAjeDr + data3.AmountBeforeAje
+	err = conn.Model(data3).UpdateColumns(&data3).
+		WithContext(ctx.Request().Context()).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return e, nil
+}
 
 func (r *adjustment) Update(ctx *abstraction.Context, id *int, e *model.AdjustmentEntity) (*model.AdjustmentEntityModel, error) {
 	conn := r.CheckTrx(ctx)

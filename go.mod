@@ -6,7 +6,6 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.11.0
-	// github.com/satori/go.uuid v1.2.0
 	github.com/segmentio/kafka-go v0.4.34
 	github.com/swaggo/swag v1.8.1
 	gorm.io/driver/postgres v1.3.8

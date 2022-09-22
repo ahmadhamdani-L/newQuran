@@ -18,9 +18,10 @@ type Service interface {
 	Find(ctx *abstraction.Context, payload *dto.AdjustmentGetRequest) (*dto.AdjustmentGetResponse, error)
 	FindByID(ctx *abstraction.Context, payload *dto.AdjustmentGetByIDRequest) (*dto.AdjustmentGetByIDResponse, error)
 	Create(ctx *abstraction.Context, payload *dto.AdjustmentCreateRequest) (*dto.AdjustmentCreateResponse, error)
+	CreateWithDetail(ctx *abstraction.Context, payload *dto.AdjustmentCreateWithDetailRequest) (*dto.AdjustmentCreateWithDetailRequest, error)
 	Update(ctx *abstraction.Context, payload *dto.AdjustmentUpdateRequest) (*dto.AdjustmentUpdateResponse, error)
 	Delete(ctx *abstraction.Context, payload *dto.AdjustmentDeleteRequest) (*dto.AdjustmentDeleteResponse, error)
-}
+} 
 
 type service struct {
 	Repository repository.Adjustment
@@ -85,6 +86,29 @@ func (s *service) Create(ctx *abstraction.Context, payload *dto.AdjustmentCreate
 		return &dto.AdjustmentCreateResponse{}, err
 	}
 	result := &dto.AdjustmentCreateResponse{
+		AdjustmentEntityModel: data,
+	}
+	return result, nil
+}
+
+func (s *service) CreateWithDetail(ctx *abstraction.Context, payload *dto.AdjustmentCreateWithDetailRequest) (*dto.AdjustmentCreateWithDetailResponse, error) {
+	var data model.AdjustmentEntityModel
+	var data1 model.AdjustmentDetailEntityModel
+
+	if err = trxmanager.New(s.Db).WithTrx(ctx, func(ctx *abstraction.Context) error {
+		data.Context = ctx
+		data.AdjustmentEntity = payload.AdjustmentEntity
+		data1.AdjustmentDetailEntity = payload.AdjustmentDetailEntity
+		result, err := s.Repository.CreateWithDetail(ctx, &data, &data1,)
+		if err != nil {
+			return response.ErrorBuilder(&response.ErrorConstant.UnprocessableEntity, err)
+		}
+		data = *result
+		return nil
+	}); err != nil {
+		return &dto.AdjustmentCreateWithDetailResponse{}, err
+	}
+	result := &dto.AdjustmentCreateWithDetailResponse{
 		AdjustmentEntityModel: data,
 	}
 	return result, nil
